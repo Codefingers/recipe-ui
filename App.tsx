@@ -5,6 +5,8 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import ServiceContext from "./services/ServiceContext";
+import RecipeService from "./services/RecipeService";
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -12,12 +14,14 @@ export default function App() {
 
   if (!isLoadingComplete) {
     return null;
-  } else {
-    return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
-    );
   }
+
+  return (
+    <SafeAreaProvider>
+      <ServiceContext.Provider value={{recipeService: new RecipeService()}}>
+        <Navigation colorScheme={colorScheme} />
+      </ServiceContext.Provider>
+      <StatusBar />
+    </SafeAreaProvider>
+  );
 }

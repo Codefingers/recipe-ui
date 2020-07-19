@@ -6,14 +6,14 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          RecipeListTab: {
             screens: {
-              TabOneScreen: 'one',
+              RecipeListScreen: 'one',
             },
           },
-          TabTwo: {
+          ExploreTab: {
             screens: {
-              TabTwoScreen: 'two',
+              RecipeListScreen: 'two',
             },
           },
         },
