@@ -23,15 +23,22 @@ export default ({recipe}: Props): React.ReactElement => (
         </MonoText>
         <View style={styles.iconContainer}>
           <MaterialCommunityIcons name="clock" color='white' size={24} /><MonoText> {recipe.duration} </MonoText>
-            {getStars(recipe.difficulty)}
+            {getChefHats(recipe.difficulty)}
         </View>
     </View>
 );
 
-function getStars(stars: number): React.ReactElement[] {
+/**
+ * Renders a chef hat element for the number equal to the difficulty level
+ *
+ * @param difficultyLevel {number} the difficulty level of the recipe to render chef hats for
+ *
+ * @returns {React.ReactElement[]}
+ */
+function getChefHats(difficultyLevel: number): React.ReactElement[] {
     let starElements: React.ReactElement[] = [];
 
-    for (let i = 0; i < stars; i++) {
+    for (let i = 0; i < difficultyLevel; i++) {
         starElements.push(
             <MaterialCommunityIcons key={i} name="chef-hat" color='white' size={24} />
         )

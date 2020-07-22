@@ -9,6 +9,13 @@ interface Props {
     recipe: Recipe
 }
 
+/**
+ * Component for editing recipes
+ *
+ * @param recipe {Recipe} Recipe that is being edited
+ *
+ * @returns {React.ReactElement}
+ */
 export default ({recipe}: Props): React.ReactElement => (
     <View style={styles.container}>
         <Input
@@ -32,15 +39,22 @@ export default ({recipe}: Props): React.ReactElement => (
             label='Difficulty'
             value={recipe.difficulty.toString()}
             labelStyle={styles.inputLabel}
-            rightIcon={getStars(recipe.difficulty)}
+            rightIcon={getChefHats(recipe.difficulty)}
         />
     </View>
 );
 
-function getStars(stars: number): React.ReactElement {
+/**
+ * Renders a chef hat element for the number equal to the difficulty level
+ *
+ * @param difficultyLevel {number} the difficulty level of the recipe to render chef hats for
+ *
+ * @returns {React.ReactElement}
+ */
+function getChefHats(difficultyLevel: number): React.ReactElement{
     let starElements: React.ReactElement[] = [];
 
-    for (let i = 0; i < stars; i++) {
+    for (let i = 0; i < difficultyLevel; i++) {
         starElements.push(
             <MaterialCommunityIcons key={i} name="chef-hat" color='white' size={24} />
         )
