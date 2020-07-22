@@ -60,7 +60,7 @@ function ExploreTabNavigator() {
   return (
     <ExploreTabStack.Navigator>
       <ExploreTabStack.Screen
-        name="RecipeListScreen"
+        name="RecipeExploreScreen"
         component={ExploreScreen}
         options={{ headerTitle: 'Explore' }}
       />

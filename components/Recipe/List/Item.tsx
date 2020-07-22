@@ -1,6 +1,8 @@
 import * as React from "react";
 import {Recipe} from "../../../services/types";
-import {Text} from "../../Themed";
+import {MonoText} from "../../StyledText";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {StyleSheet, View} from "react-native";
 
 /** Describes props for this component */
 interface Props {
@@ -14,8 +16,41 @@ interface Props {
  *
  * @returns {React.ReactElement}
  */
-export default ({recipe}: Props): React.ReactElement =>
-    <Text>
-        {recipe.name}
-    </Text>
+export default ({recipe}: Props): React.ReactElement => (
+    <View style={styles.container}>
+        <MonoText>
+            {recipe.name}
+        </MonoText>
+        <View style={styles.iconContainer}>
+          <MaterialCommunityIcons name="clock" color='white' size={24} /><MonoText> {recipe.duration} </MonoText>
+            {getStars(recipe.difficulty)}
+        </View>
+    </View>
+);
 
+function getStars(stars: number): React.ReactElement[] {
+    let starElements: React.ReactElement[] = [];
+
+    for (let i = 0; i < stars; i++) {
+        starElements.push(
+            <MaterialCommunityIcons key={i} name="chef-hat" color='white' size={24} />
+        )
+    }
+
+    return starElements;
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    iconContainer: {
+        display: "flex",
+        flex: 1,
+        justifyContent: 'flex-end',
+        flexDirection: "row",
+    }
+})

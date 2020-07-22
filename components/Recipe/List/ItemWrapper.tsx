@@ -1,12 +1,12 @@
 import styled from 'styled-components/native'
 
 export default styled.View`
-    width: 100%;
-    height: 50px;
-    margin-bottom: 10px;
-    background-color: orange;  
+    height: 56px;
+    margin-bottom: 4px;
+    background-color: #88B7B5;  
     display: flex;
     padding: 8px;
-    margin-left: auto;
-    margin-right: auto;
+    border-radius: 4px; 
+    align-items: center;
+    justify-content: center;
 `;

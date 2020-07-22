@@ -1,4 +1,4 @@
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import {NavigationContainer, Theme} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
@@ -7,6 +7,19 @@ import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import EditRecipeScreen from "../screens/EditRecipeScreen";
+
+const Light: Theme = {
+    dark: false,
+    colors: {
+        primary: '#A7CAB1',
+        background: '#F4ECD6',
+        card: 'black',
+        text: 'white',
+        border: 'black',
+        notification: 'rgb(255, 69, 58)',
+    },
+};
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -14,7 +27,7 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={Light}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -30,6 +43,7 @@ function RootNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
+      <Stack.Screen name="EditRecipe" component={EditRecipeScreen} />
     </Stack.Navigator>
   );
 }

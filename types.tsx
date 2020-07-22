@@ -1,6 +1,9 @@
+import {Recipe} from "./services/types";
+
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
+  EditRecipe: { recipe: Recipe };
 };
 
 export type BottomTabParamList = {
@@ -13,5 +16,5 @@ export type RecipeListTabParamList = {
 };
 
 export type ExploreTabParamList = {
-  RecipeListScreen: undefined;
+  RecipeExploreScreen: undefined;
 };
