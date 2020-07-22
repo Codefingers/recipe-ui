@@ -18,11 +18,14 @@ interface Props {
  */
 export default ({recipe}: Props): React.ReactElement => (
     <View style={styles.container}>
-        <MonoText>
+        <MonoText style={styles.recipeName}>
             {recipe.name}
         </MonoText>
         <View style={styles.iconContainer}>
-          <MaterialCommunityIcons name="clock" color='white' size={24} /><MonoText> {recipe.duration} </MonoText>
+            <View style={styles.durationContainer}>
+                <MaterialCommunityIcons name="clock" color='white' size={24} style={styles.durationIcon}/>
+                <MonoText> {recipe.duration} </MonoText>
+            </View>
             {getChefHats(recipe.difficulty)}
         </View>
     </View>
@@ -52,12 +55,30 @@ const styles = StyleSheet.create({
         flex: 1,
         display: "flex",
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
+        width: '100%',
     },
     iconContainer: {
         display: "flex",
         flex: 1,
         justifyContent: 'flex-end',
+        flexDirection: "row",
+    },
+    durationContainer: {
+        padding: 0,
+        margin: 0,
+        display: "flex",
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: 'flex-end',
+    },
+    durationIcon: {
+      marginRight: -8,
+    },
+    recipeName: {
+        display: "flex",
+        flex: 1,
+        justifyContent: 'flex-start',
         flexDirection: "row",
     }
 })
