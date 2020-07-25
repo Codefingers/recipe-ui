@@ -12,12 +12,14 @@ import {StackNavigationProp} from "@react-navigation/stack";
 /** This components props */
 interface Props {
     service: RecipeService,
-    navigation: StackNavigationProp<any>
+    navigation: StackNavigationProp<any>,
+    newRecipe?: Recipe,
 }
 
 /** This components state */
 interface State {
     selectedItem?: Recipe
+    recipes: Recipe[],
 }
 
 /** Row current being handled */
@@ -37,8 +39,33 @@ export default class List extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            selectedItem: undefined
+            selectedItem: undefined,
+            recipes: [],
         };
+    }
+
+    /**
+     * @inheritDoc
+     */
+    componentDidMount = () =>
+        this.setState({
+            recipes: this.props.service.getRecipes()
+        })
+
+    /**
+     * @inheritDoc
+     */
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
+        const isNewRecipe: boolean = !this.state.recipes.find((recipe: Recipe): boolean => recipe.name === this.props.newRecipe?.name)
+
+        if (this.props.newRecipe !== prevProps.newRecipe && this.props.newRecipe && isNewRecipe) {
+            this.setState({
+                recipes: [
+                    ...this.state.recipes,
+                    this.props.newRecipe
+                ]
+            })
+        }
     }
 
     /**
@@ -46,7 +73,7 @@ export default class List extends React.PureComponent<Props, State> {
      */
     public render = (): React.ReactElement => (
         <FlatList<Recipe>
-            data={this.props.service.getRecipes()}
+            data={this.state.recipes}
             renderItem={this.renderItem}
             keyExtractor={recipe => recipe.name}
             style={{backgroundColor: '#F4ECD6', paddingTop: 4}}
@@ -80,7 +107,7 @@ export default class List extends React.PureComponent<Props, State> {
      */
     private renderRightActions = (item: Recipe): () => React.ReactElement => () => (
         <>
-            <ActionButton error={true} onPress={this.onDeletePress}>
+            <ActionButton error={true} onPress={this.onDeletePress(item)}>
                 <MaterialCommunityIcons name="trash-can" color='white' size={24} />
             </ActionButton>
             <ActionButton onPress={this.onEditPress(item)}>
@@ -110,17 +137,21 @@ export default class List extends React.PureComponent<Props, State> {
      *
      * @param item {Recipe} Recipe that is being edited
      *
-     * @returns void
+     * @returns {() => void}
      */
-    private onEditPress = (item: Recipe) => (pointerInside: boolean) =>
+    private onEditPress = (item: Recipe) => () =>
         this.props.navigation.navigate('EditRecipe', {recipe: item});
 
     /**
      * Handler for when delete was pressed
      *
-     * @param pointerInside {boolean}
+     * @param item {Recipe} Recipe that is being deleted
+     *
+     * @returns {() => void}
      */
-    private onDeletePress = (pointerInside: boolean) => {
-        this.props.navigation.navigate('NotFound');
+    private onDeletePress = (item: Recipe) => () => {
+        this.setState({
+            recipes: this.state.recipes.filter((recipe: Recipe) => recipe.name !== item.name)
+        })
     }
 }
