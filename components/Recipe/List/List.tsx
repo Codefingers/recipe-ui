@@ -47,9 +47,9 @@ export default class List extends React.PureComponent<Props, State> {
     /**
      * @inheritDoc
      */
-    componentDidMount = () =>
+    componentDidMount = async (): Promise<void> =>
         this.setState({
-            recipes: this.props.service.getRecipes()
+            recipes: await this.props.service.getRecipes()
         })
 
     /**

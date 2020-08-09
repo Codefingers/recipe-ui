@@ -13,7 +13,6 @@ const addAuthorizationHeader: AddAuthorizationHeader = async (
     config: AxiosRequestConfig
 ): Promise<AxiosRequestConfig> => {
     const token: string | null = await AsyncStorage.getItem('token');
-    console.warn(token);
     if (token) {
         config.headers.common.Authorization = `Bearer ${token}`;
     }
