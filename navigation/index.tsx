@@ -4,10 +4,11 @@ import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
-import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import EditRecipeScreen from "../screens/EditRecipeScreen";
+import CreateRecipeScreen from "../screens/CreateRecipeScreen";
+import {RootStackParamList} from "../types";
 
 const Light: Theme = {
     dark: false,
@@ -43,7 +44,8 @@ function RootNavigator() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Screen name="EditRecipe" component={EditRecipeScreen} />
+      <Stack.Screen name="CreateRecipe" component={CreateRecipeScreen} options={{ headerShown: true, headerTitle: 'Create Recipe'}} />
+      <Stack.Screen name="EditRecipe" component={EditRecipeScreen} options={{ headerShown: true, headerTitle: 'Edit Recipe'}} />
     </Stack.Navigator>
   );
 }

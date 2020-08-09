@@ -7,12 +7,16 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  RecipeListTab: undefined;
+  RecipeListTab: { newRecipe: undefined };
   ExploreTab: undefined;
 };
 
 export type RecipeListTabParamList = {
-  RecipeListScreen: undefined;
+  RecipeListScreen: { newRecipe: undefined };
+};
+
+export type EditRecipeParamList = {
+  EditRecipeScreen: undefined;
 };
 
 export type ExploreTabParamList = {

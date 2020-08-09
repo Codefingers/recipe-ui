@@ -6,6 +6,7 @@ import {StackNavigationProp} from "@react-navigation/stack";
 import {RouteProp} from "@react-navigation/native";
 import Edit from "../components/Recipe/Edit";
 import ServiceContext, {ServiceContextData} from "../services/ServiceContext";
+import Create from "../components/Recipe/Create";
 
 type EditRecipeScreenNavigationProp = StackNavigationProp<RootStackParamList,
     'EditRecipe'>;
@@ -18,12 +19,10 @@ export type EditRecipeScreenProps = {
 };
 
 export default function EditRecipeScreen({route, navigation}: EditRecipeScreenProps) {
-    const recipe = route.params?.recipe;
-
     return (
         <ServiceContext.Consumer>
             {(serviceContextData: ServiceContextData): React.ReactElement => (
-                <Edit service={serviceContextData.recipeService} navigation={navigation} recipe={recipe}/>
+                <Create service={serviceContextData.recipeService} navigation={navigation}/>
             )}
         </ServiceContext.Consumer>
     );
