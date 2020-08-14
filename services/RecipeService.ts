@@ -16,47 +16,18 @@ export default class RecipeService {
 
         await Http.get<Recipe[]>('/recipe').then((response: AxiosResponse<Recipe[]>) => {
             recipes = response.data;
-        }).catch(() => {
-            recipes = [
-                {
-                    id: 1,
-                    name: 'Cepelinai',
-                    difficulty: 5,
-                    duration: 240,
-                },
-                {
-                    id: 2,
-                    name: 'Wet Burger',
-                    difficulty: 3,
-                    duration: 60
-                },
-                {
-                    id: 3,
-                    name: 'Pizza',
-                    difficulty: 3,
-                    duration: 180
-                },
-                {
-                    id: 4,
-                    name: 'Katsu Curry',
-                    duration: 80,
-                    difficulty: 4,
-                },
-                {
-                    id: 5,
-                    name: 'Lasagne',
-                    duration: 60,
-                    difficulty: 2
-                },
-                {
-                    id: 6,
-                    name: 'Bolognese',
-                    duration: 60,
-                    difficulty: 2
-                }
-            ];
+        }).catch((reason) => {
+            console.warn(reason);
         });
 
         return recipes;
+    }
+
+    public async createRecipe(recipe: Recipe): Promise<Recipe> {
+        await Http.post<Recipe>('/recipe', {
+            recipe
+        });
+
+        return recipe;
     }
 }
