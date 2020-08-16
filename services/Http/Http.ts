@@ -1,13 +1,12 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import AddAuthorizationHeader from './AddAuthorizationHeader';
-import {BASE_API_URL} from "@env";
+import Constants from 'expo-constants';
 
 /** Instance of Axios for HTTP API requests */
 const instance: AxiosInstance = axios.create();
 
 instance.interceptors.request.use((config: AxiosRequestConfig): AxiosRequestConfig => {
-    const baseUrl: string = BASE_API_URL
-    config.baseURL = baseUrl;
+    config.baseURL = Constants.manifest.extra.baseApiUrl;
 
     return config;
 });
