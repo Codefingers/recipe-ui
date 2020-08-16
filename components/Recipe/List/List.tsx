@@ -1,5 +1,5 @@
 import * as React from "react";
-import {FlatList} from "react-native";
+import {FlatList, RefreshControl} from "react-native";
 import Item from "./Item";
 import RecipeService from "../../../services/RecipeService";
 import {Recipe} from "../../../services/types";
@@ -8,18 +8,20 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ActionButton from "./ActionButton";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {ScrollView} from "../../Themed";
 
 /** This components props */
 interface Props {
     service: RecipeService,
     navigation: StackNavigationProp<any>,
-    newRecipe?: Recipe,
+    newOrUpdatedRecipe?: Recipe,
 }
 
 /** This components state */
 interface State {
-    selectedItem?: Recipe
+    selectedItem?: Recipe,
     recipes: Recipe[],
+    refreshing: boolean,
 }
 
 /** Row current being handled */
@@ -41,6 +43,7 @@ export default class List extends React.PureComponent<Props, State> {
         this.state = {
             selectedItem: undefined,
             recipes: [],
+            refreshing: false,
         };
     }
 
@@ -56,14 +59,25 @@ export default class List extends React.PureComponent<Props, State> {
      * @inheritDoc
      */
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
-        const isNewRecipe: boolean = !this.state.recipes.find((recipe: Recipe): boolean => recipe.name === this.props.newRecipe?.name)
+        const recipes = [...this.state.recipes];
+        const recipeIndex: number = recipes.findIndex((recipe: Recipe): boolean => recipe.id === this.props.newOrUpdatedRecipe?.id);
 
-        if (this.props.newRecipe !== prevProps.newRecipe && this.props.newRecipe && isNewRecipe) {
+
+        if (this.props.newOrUpdatedRecipe !== prevProps.newOrUpdatedRecipe && this.props.newOrUpdatedRecipe) {
+            if (recipeIndex === -1) {
+                this.setState({
+                    recipes: [
+                        ...recipes,
+                        this.props.newOrUpdatedRecipe
+                    ]
+                });
+
+                return;
+            }
+
+            recipes.splice(recipeIndex, 1, this.props.newOrUpdatedRecipe);
             this.setState({
-                recipes: [
-                    ...this.state.recipes,
-                    this.props.newRecipe
-                ]
+                recipes,
             })
         }
     }
@@ -71,14 +85,16 @@ export default class List extends React.PureComponent<Props, State> {
     /**
      * @inheritDoc
      */
-    public render = (): React.ReactElement => (
+    public render = (): React.ReactElement =>
         <FlatList<Recipe>
+            refreshControl={
+                <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>
+            }
             data={this.state.recipes}
             renderItem={this.renderItem}
             keyExtractor={recipe => recipe.name}
             style={{backgroundColor: '#F4ECD6', paddingTop: 4}}
         />
-    );
 
     /**
      * Renders a list item
@@ -139,7 +155,7 @@ export default class List extends React.PureComponent<Props, State> {
      *
      * @returns {() => void}
      */
-    private onEditPress = (item: Recipe) => () =>
+    private onEditPress = (item: Recipe) => async (): Promise<void> =>
         this.props.navigation.navigate('EditRecipe', {recipe: item});
 
     /**
@@ -149,9 +165,28 @@ export default class List extends React.PureComponent<Props, State> {
      *
      * @returns {() => void}
      */
-    private onDeletePress = (item: Recipe) => () => {
+    private onDeletePress = (item: Recipe) => async (): Promise<void> => {
+        await this.props.service.deleteRecipe(item);
+
         this.setState({
             recipes: this.state.recipes.filter((recipe: Recipe) => recipe.name !== item.name)
         })
+    }
+
+    /**
+     * Handler for when refresh is triggered
+     *
+     * @return {Promise<void>}
+     */
+    private onRefresh = async (): Promise<void> => {
+        this.setState({
+            refreshing: true,
+        });
+
+        const recipes: Recipe[] = await this.props.service.getRecipes();
+        this.setState({
+            recipes,
+            refreshing: false,
+        });
     }
 }

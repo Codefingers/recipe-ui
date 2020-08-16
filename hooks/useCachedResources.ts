@@ -4,7 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios, {AxiosResponse} from 'axios';
-import {EMAIL, PASSWORD} from "@env";
+import {EMAIL, PASSWORD, BASE_API_URL} from "@env";
 
 /**
  * Describes the login response from the API
@@ -28,14 +28,13 @@ export default function useCachedResources() {
           'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
         });
 
-        await axios.post<LoginServerResponse>('http://64.227.43.81/api/auth/login', {
+        await axios.post<LoginServerResponse>(BASE_API_URL + '/auth/login', {
           email: EMAIL,
           password: PASSWORD
         }).then(async (response: AxiosResponse<LoginServerResponse>): Promise<void> => {
           await AsyncStorage.setItem('token', response.data.access_token);
         });
       } catch (e) {
-        // We might want to provide this error information to an error reporting service
         console.warn(e);
       } finally {
         setLoadingComplete(true);

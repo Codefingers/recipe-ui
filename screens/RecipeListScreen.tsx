@@ -1,29 +1,26 @@
 import * as React from 'react';
 import ServiceContext, {ServiceContextData} from "../services/ServiceContext";
 import List from "../components/Recipe/List";
-import {View} from "../components/Themed";
 import { useFocusEffect } from '@react-navigation/native';
 
 /**
  * The recipe list screen for displaying recipes
  */
 export default function RecipeListScreen({ route, navigation }) {
-    const [newRecipe, setNewRecipe] = React.useState(undefined);
+    const [newOrUpdatedRecipe, setNewRecipe] = React.useState(undefined);
 
     useFocusEffect(
         React.useCallback(() => {
-            setNewRecipe(route.params?.newRecipe);
+            setNewRecipe(route.params?.recipe);
 
             return;
-        }, [route.params?.newRecipe])
+        }, [route.params?.recipe])
     );
 
     return (
         <ServiceContext.Consumer>
             {(serviceContextData: ServiceContextData ): React.ReactElement => (
-                <View>
-                    <List service={serviceContextData.recipeService} navigation={navigation} newRecipe={newRecipe} />
-                </View>
+                <List service={serviceContextData.recipeService} navigation={navigation} newOrUpdatedRecipe={newOrUpdatedRecipe} />
             )}
         </ServiceContext.Consumer>
     );

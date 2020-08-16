@@ -170,10 +170,21 @@ export default class Edit extends React.PureComponent<Props, State> {
                     iconRight={true}
                     titleStyle={styles.buttonLabel}
                     buttonStyle={styles.saveButton}
+                    onPress={this.onSave}
                 >
                 </Button>
             </View>
         );
+    }
+
+    /**
+     * Handler for when save is pressed
+     *
+     * @return {async () => {Promise<void>}}
+     */
+    private onSave = async (): Promise<void> => {
+        const updatedRecipe: Recipe = await this.props.service.updateRecipe(this.state.editedRecipe);
+        this.props.navigation.navigate('RecipeListScreen', {recipe: updatedRecipe})
     }
 }
 

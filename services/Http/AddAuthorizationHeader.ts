@@ -1,5 +1,5 @@
-import { AxiosRequestConfig } from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
+import {AxiosRequestConfig} from "axios";
 
 /** Signature for addAuthorizationHeader() function */
 type AddAuthorizationHeader = (config: AxiosRequestConfig) => Promise<AxiosRequestConfig>;

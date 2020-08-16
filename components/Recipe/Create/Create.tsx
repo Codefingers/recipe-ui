@@ -159,14 +159,20 @@ export default class Create extends React.PureComponent<Props, State> {
                     iconRight={true}
                     titleStyle={styles.buttonLabel}
                     buttonStyle={styles.saveButton}
-                    onPress={this.onPress}
+                    onPress={this.onCreatePress}
                 >
                 </Button>
             </View>
         );
 
-    private onPress = (): void => {
-        this.props.navigation.navigate('RecipeListScreen', {newRecipe: this.state.recipe})
+    /**
+     * Handler for when create is pressed
+     *
+     * @returns {Promise<void>}
+     */
+    private onCreatePress = async (): Promise<void> => {
+        const createdRecipe: Recipe = await this.props.service.createRecipe(this.state.recipe);
+        this.props.navigation.navigate('RecipeListScreen', {recipe: createdRecipe})
     }
 
     /**

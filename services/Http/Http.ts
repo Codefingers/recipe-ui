@@ -1,11 +1,13 @@
 import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
 import AddAuthorizationHeader from './AddAuthorizationHeader';
+import {BASE_API_URL} from "@env";
 
 /** Instance of Axios for HTTP API requests */
 const instance: AxiosInstance = axios.create();
 
 instance.interceptors.request.use((config: AxiosRequestConfig): AxiosRequestConfig => {
-    config.baseURL = 'http://64.227.43.81/api';
+    const baseUrl: string = BASE_API_URL
+    config.baseURL = baseUrl;
 
     return config;
 });
