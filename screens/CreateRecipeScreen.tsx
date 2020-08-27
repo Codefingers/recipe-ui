@@ -1,28 +1,24 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
-import {View} from '../components/Themed';
 import {RootStackParamList} from "../types";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {RouteProp} from "@react-navigation/native";
-import Edit from "../components/Recipe/Edit";
 import ServiceContext, {ServiceContextData} from "../services/ServiceContext";
-import Create from "../components/Recipe/Create";
+import Form from "../components/Recipe/Common/Form";
 
-type EditRecipeScreenNavigationProp = StackNavigationProp<RootStackParamList,
-    'EditRecipe'>;
+type CreateRecipeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'CreateRecipe'>;
 
-type EditRecipeScreenRouteProp = RouteProp<RootStackParamList, 'EditRecipe'>;
+type CreateRecipeScreenRouteProp = RouteProp<RootStackParamList, 'CreateRecipe'>;
 
-export type EditRecipeScreenProps = {
-    navigation: EditRecipeScreenNavigationProp;
-    route: EditRecipeScreenRouteProp;
+export type CreateRecipeScreenProps = {
+    navigation: CreateRecipeScreenNavigationProp;
+    route: CreateRecipeScreenRouteProp;
 };
 
-export default function EditRecipeScreen({route, navigation}: EditRecipeScreenProps) {
+export default function CreateRecipeScreen({route, navigation}: CreateRecipeScreenProps) {
     return (
         <ServiceContext.Consumer>
             {(serviceContextData: ServiceContextData): React.ReactElement => (
-                <Create service={serviceContextData.recipeService} navigation={navigation}/>
+                <Form service={serviceContextData.recipeService} navigation={navigation}/>
             )}
         </ServiceContext.Consumer>
     );

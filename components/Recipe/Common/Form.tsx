@@ -2,14 +2,15 @@ import * as React from "react";
 import {StyleSheet, View} from "react-native";
 import {Recipe} from "../../../services/types";
 import {Button, Input} from 'react-native-elements';
-import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
+import {MaterialCommunityIcons} from "@expo/vector-icons";
 import RecipeService from "../../../services/RecipeService";
 import {StackNavigationProp} from "@react-navigation/stack";
 
 /** Describes this components props */
 interface Props {
     service: RecipeService,
-    navigation: StackNavigationProp<any>
+    navigation: StackNavigationProp<any>,
+    recipe?: Recipe,
 }
 
 /** Describes this components state */
@@ -30,13 +31,13 @@ const MAX_DURATION: number = 4800;
 const MIN_DURATION: number = 0;
 
 /**
- * Component for editing recipes
+ * Component for creating and editing recipes
  *
  * @param recipe {Recipe} Recipe that is being edited
  *
  * @returns {React.ReactElement}
  */
-export default class Create extends React.PureComponent<Props, State> {
+export default class Form extends React.PureComponent<Props, State> {
     /**
      * Constructor
      */
@@ -44,7 +45,7 @@ export default class Create extends React.PureComponent<Props, State> {
         super(props);
 
         this.state = {
-            recipe: {
+            recipe: this.props.recipe || {
                 difficulty: 1,
                 duration: 60,
                 name: ''
@@ -118,39 +119,11 @@ export default class Create extends React.PureComponent<Props, State> {
     }
 
     /**
-     * @inheritDoc
+     * Renders form buttons
      */
-    public render = (): React.ReactElement => (
-            <View style={styles.container}>
-                <View style={styles.formContainer}>
-                    <Input
-                        inputStyle={styles.input}
-                        label='Name'
-                        value={this.state.recipe.name}
-                        labelStyle={styles.inputLabel}
-                        rightIconContainerStyle={styles.iconContainer}
-                        onChangeText={this.nameChangeHandler}
-                    />
-                    <Input
-                        inputStyle={styles.input}
-                        label='Duration (minutes)'
-                        value={this.state.recipe.duration.toString()}
-                        labelStyle={styles.inputLabel}
-                        rightIconContainerStyle={styles.iconContainer}
-                        rightIcon={<MaterialCommunityIcons name="clock" color='white' size={24}/>}
-                        keyboardType={"numeric"}
-                        onChangeText={this.durationChangeHandler}
-                    />
-                    <Input
-                        inputStyle={styles.input}
-                        label='Difficulty'
-                        value={this.state.recipe.difficulty.toString()}
-                        labelStyle={styles.inputLabel}
-                        rightIcon={this.getChefHats(this.state.recipe.difficulty)}
-                        keyboardType={"numeric"}
-                        onChangeText={this.difficultyChangeHandler}
-                    />
-                </View>
+    private renderFooterActions = (): React.ReactElement => {
+        if (!this.props.recipe) {
+            return (
                 <Button
                     title={'Create'}
                     icon={
@@ -162,8 +135,62 @@ export default class Create extends React.PureComponent<Props, State> {
                     onPress={this.onCreatePress}
                 >
                 </Button>
-            </View>
+            );
+        }
+
+        return (
+            <Button
+                title={'Save'}
+                icon={
+                    <MaterialCommunityIcons name="check" color='white' size={42}/>
+                }
+                iconRight={true}
+                titleStyle={styles.buttonLabel}
+                buttonStyle={styles.saveButton}
+                onPress={this.onSavePress}
+            >
+            </Button>
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public render = (): React.ReactElement => (
+        <View style={styles.container}>
+            <View style={styles.formContainer}>
+                <Input
+                    inputStyle={styles.input}
+                    label='Name'
+                    value={this.state.recipe.name}
+                    labelStyle={styles.inputLabel}
+                    rightIconContainerStyle={styles.iconContainer}
+                    onChangeText={this.nameChangeHandler}
+                />
+                <Input
+                    inputStyle={styles.input}
+                    label='Duration (minutes)'
+                    value={this.state.recipe.duration.toString()}
+                    labelStyle={styles.inputLabel}
+                    rightIconContainerStyle={styles.iconContainer}
+                    rightIcon={<MaterialCommunityIcons name="clock" color='white' size={24}/>}
+                    keyboardType={"numeric"}
+                    onChangeText={this.durationChangeHandler}
+                />
+                <Input
+                    inputStyle={styles.input}
+                    label='Difficulty'
+                    value={this.state.recipe.difficulty.toString()}
+                    labelStyle={styles.inputLabel}
+                    rightIcon={this.getChefHats(this.state.recipe.difficulty)}
+                    keyboardType={"numeric"}
+                    onChangeText={this.difficultyChangeHandler}
+                />
+            </View>
+            {this.renderFooterActions()}
+        </View>
+
+    );
 
     /**
      * Handler for when create is pressed
@@ -173,6 +200,16 @@ export default class Create extends React.PureComponent<Props, State> {
     private onCreatePress = async (): Promise<void> => {
         const createdRecipe: Recipe = await this.props.service.createRecipe(this.state.recipe);
         this.props.navigation.navigate('RecipeListScreen', {recipe: createdRecipe})
+    }
+
+    /**
+     * Handler for when save is pressed
+     *
+     * @return {async () => {Promise<void>}}
+     */
+    private onSavePress = async (): Promise<void> => {
+        const updatedRecipe: Recipe = await this.props.service.updateRecipe(this.state.recipe);
+        this.props.navigation.navigate('RecipeListScreen', {recipe: updatedRecipe})
     }
 
     /**

@@ -3,6 +3,7 @@ import {Recipe} from "./services/types";
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
+  CreateRecipe: undefined;
   EditRecipe: { recipe: Recipe };
 };
 

@@ -1,11 +1,9 @@
 import * as React from 'react';
-import {StyleSheet} from 'react-native';
-import {View} from '../components/Themed';
 import {RootStackParamList} from "../types";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {RouteProp} from "@react-navigation/native";
-import Edit from "../components/Recipe/Edit";
 import ServiceContext, {ServiceContextData} from "../services/ServiceContext";
+import Form from "../components/Recipe/Common/Form";
 
 type EditRecipeScreenNavigationProp = StackNavigationProp<RootStackParamList,
     'EditRecipe'>;
@@ -23,7 +21,7 @@ export default function EditRecipeScreen({route, navigation}: EditRecipeScreenPr
     return (
         <ServiceContext.Consumer>
             {(serviceContextData: ServiceContextData): React.ReactElement => (
-                <Edit service={serviceContextData.recipeService} navigation={navigation} recipe={recipe}/>
+                <Form service={serviceContextData.recipeService} navigation={navigation} recipe={recipe}/>
             )}
         </ServiceContext.Consumer>
     );
