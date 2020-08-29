@@ -77,6 +77,10 @@ export default class Form extends React.PureComponent<Props, State> {
      */
     private durationChangeHandler = (duration: string): void => {
         let durationNumeric: number = Number(duration);
+        if (isNaN(durationNumeric)) {
+            durationNumeric = MIN_DURATION;
+        }
+
         if (durationNumeric > MAX_DURATION) {
             durationNumeric = MAX_DURATION;
         }
@@ -102,6 +106,10 @@ export default class Form extends React.PureComponent<Props, State> {
      */
     private difficultyChangeHandler = (difficulty: string): void => {
         let difficultyNumeric: number = Number(difficulty);
+        if (isNaN(difficultyNumeric)) {
+            difficultyNumeric = MIN_DIFFICULTY;
+        }
+
         if (difficultyNumeric > MAX_DIFFICULTY) {
             difficultyNumeric = MAX_DIFFICULTY;
         }
@@ -120,6 +128,8 @@ export default class Form extends React.PureComponent<Props, State> {
 
     /**
      * Renders form buttons
+     *
+     * @returns {React.ReactElement}
      */
     private renderFooterActions = (): React.ReactElement => {
         if (!this.props.recipe) {
@@ -133,6 +143,7 @@ export default class Form extends React.PureComponent<Props, State> {
                     titleStyle={styles.buttonLabel}
                     buttonStyle={styles.saveButton}
                     onPress={this.onCreatePress}
+                    data-qa="create-recipe-button"
                 >
                 </Button>
             );
@@ -148,6 +159,7 @@ export default class Form extends React.PureComponent<Props, State> {
                 titleStyle={styles.buttonLabel}
                 buttonStyle={styles.saveButton}
                 onPress={this.onSavePress}
+                data-qa="save-recipe-button"
             >
             </Button>
         );
@@ -166,6 +178,7 @@ export default class Form extends React.PureComponent<Props, State> {
                     labelStyle={styles.inputLabel}
                     rightIconContainerStyle={styles.iconContainer}
                     onChangeText={this.nameChangeHandler}
+                    data-qa="recipe-name-input"
                 />
                 <Input
                     inputStyle={styles.input}
@@ -176,6 +189,7 @@ export default class Form extends React.PureComponent<Props, State> {
                     rightIcon={<MaterialCommunityIcons name="clock" color='white' size={24}/>}
                     keyboardType={"numeric"}
                     onChangeText={this.durationChangeHandler}
+                    data-qa="recipe-duration-input"
                 />
                 <Input
                     inputStyle={styles.input}
@@ -185,6 +199,7 @@ export default class Form extends React.PureComponent<Props, State> {
                     rightIcon={this.getChefHats(this.state.recipe.difficulty)}
                     keyboardType={"numeric"}
                     onChangeText={this.difficultyChangeHandler}
+                    data-qa="recipe-difficulty-input"
                 />
             </View>
             {this.renderFooterActions()}
@@ -224,7 +239,7 @@ export default class Form extends React.PureComponent<Props, State> {
 
         for (let i = 0; i < difficultyLevel; i++) {
             starElements.push(
-                <MaterialCommunityIcons key={i} name="chef-hat" color='white' size={24}/>
+                <MaterialCommunityIcons data-qa="chef-hat" key={i} name="chef-hat" color='white' size={24}/>
             )
         }
 
