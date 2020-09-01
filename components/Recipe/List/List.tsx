@@ -53,7 +53,7 @@ export default class List extends React.PureComponent<Props, State> {
     componentDidMount = async (): Promise<void> =>
         this.setState({
             recipes: await this.props.service.getRecipes()
-        })
+        });
 
     /**
      * @inheritDoc
@@ -87,6 +87,7 @@ export default class List extends React.PureComponent<Props, State> {
      */
     public render = (): React.ReactElement =>
         <FlatList<Recipe>
+            data-qa="recipe-list"
             refreshControl={
                 <RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh}/>
             }
@@ -111,7 +112,7 @@ export default class List extends React.PureComponent<Props, State> {
             ref={ref => row[index] = ref}
         >
             <ItemWrapper>
-                <Item recipe={item}/>
+                <Item data-qa="recipe-item" recipe={item}/>
             </ItemWrapper>
         </Swipeable>
     );
