@@ -62,8 +62,8 @@ export default class List extends React.PureComponent<Props, State> {
         const recipes = [...this.state.recipes];
         const recipeIndex: number = recipes.findIndex((recipe: Recipe): boolean => recipe.id === this.props.newOrUpdatedRecipe?.id);
 
-
         if (this.props.newOrUpdatedRecipe !== prevProps.newOrUpdatedRecipe && this.props.newOrUpdatedRecipe) {
+            // if our recipe is a new one, add it to the list
             if (recipeIndex === -1) {
                 this.setState({
                     recipes: [
@@ -75,6 +75,7 @@ export default class List extends React.PureComponent<Props, State> {
                 return;
             }
 
+            // otherwise replace the old copy of the recipe that has been updated
             recipes.splice(recipeIndex, 1, this.props.newOrUpdatedRecipe);
             this.setState({
                 recipes,
@@ -124,10 +125,10 @@ export default class List extends React.PureComponent<Props, State> {
      */
     private renderRightActions = (item: Recipe): () => React.ReactElement => () => (
         <>
-            <ActionButton error={true} onPress={this.onDeletePress(item)}>
+            <ActionButton error={true} data-qa="delete-recipe-button" onPress={this.onDeletePress(item)}>
                 <MaterialCommunityIcons name="trash-can" color='white' size={24} />
             </ActionButton>
-            <ActionButton onPress={this.onEditPress(item)}>
+            <ActionButton data-qa="edit-recipe-button" onPress={this.onEditPress(item)}>
                 <MaterialCommunityIcons name="pencil" color='white' size={24} />
             </ActionButton>
         </>
@@ -156,8 +157,10 @@ export default class List extends React.PureComponent<Props, State> {
      *
      * @returns {() => void}
      */
-    private onEditPress = (item: Recipe) => async (): Promise<void> =>
+    private onEditPress = (item: Recipe) => async (): Promise<void> => {
+        row = [];
         this.props.navigation.navigate('EditRecipe', {recipe: item});
+    }
 
     /**
      * Handler for when delete was pressed
@@ -171,7 +174,7 @@ export default class List extends React.PureComponent<Props, State> {
 
         this.setState({
             recipes: this.state.recipes.filter((recipe: Recipe) => recipe.name !== item.name)
-        })
+        });
     }
 
     /**
@@ -180,6 +183,7 @@ export default class List extends React.PureComponent<Props, State> {
      * @return {Promise<void>}
      */
     private onRefresh = async (): Promise<void> => {
+        row = [];
         this.setState({
             refreshing: true,
         });
