@@ -23,6 +23,13 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "description": "",
+    "githubUrl": "https://github.com/Codefingers/recipe-ui",
+    "extra": {
+      "baseApiUrl": "http://64.227.43.81/api",
+      "testEmail": "test-user@test.com",
+      "testPassword": "Password1!"
     }
   }
 }

@@ -1,6 +1,7 @@
 import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
 
 import Colors from '../constants/Colors';
@@ -8,6 +9,7 @@ import useColorScheme from '../hooks/useColorScheme';
 import RecipeListScreen from '../screens/RecipeListScreen';
 import ExploreScreen from '../screens/ExploreScreen';
 import { BottomTabParamList, RecipeListTabParamList, ExploreTabParamList } from '../types';
+import AddRecipeButton from "./common/header/AddRecipeButton";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -48,7 +50,12 @@ function RecipeListTabNavigator() {
       <RecipeListTabStack.Screen
         name="RecipeListScreen"
         component={RecipeListScreen}
-        options={{ headerTitle: 'Recipes' }}
+        options={
+            {
+                headerTitle: 'Recipes',
+                headerRight: () => <AddRecipeButton />
+            }
+        }
       />
     </RecipeListTabStack.Navigator>
   );
@@ -60,9 +67,13 @@ function ExploreTabNavigator() {
   return (
     <ExploreTabStack.Navigator>
       <ExploreTabStack.Screen
-        name="RecipeListScreen"
+        name="RecipeExploreScreen"
         component={ExploreScreen}
-        options={{ headerTitle: 'Explore' }}
+        options={
+            {
+                headerTitle: 'Explore',
+            }
+        }
       />
     </ExploreTabStack.Navigator>
   );

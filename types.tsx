@@ -1,17 +1,25 @@
+import {Recipe} from "./services/types";
+
 export type RootStackParamList = {
   Root: undefined;
   NotFound: undefined;
+  CreateRecipe: undefined;
+  EditRecipe: { recipe: Recipe };
 };
 
 export type BottomTabParamList = {
-  RecipeListTab: undefined;
+  RecipeListTab: { newRecipe: undefined };
   ExploreTab: undefined;
 };
 
 export type RecipeListTabParamList = {
-  RecipeListScreen: undefined;
+  RecipeListScreen: { newRecipe: undefined };
+};
+
+export type EditRecipeParamList = {
+  EditRecipeScreen: undefined;
 };
 
 export type ExploreTabParamList = {
-  RecipeListScreen: undefined;
+  RecipeExploreScreen: undefined;
 };
