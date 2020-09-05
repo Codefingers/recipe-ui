@@ -6,7 +6,6 @@ import renderer, {ReactTestInstance, ReactTestRenderer} from "react-test-rendere
 import React from "react";
 import List from "../List";
 import FlushPromises from "../../../../helpers/FlushPromises";
-import {RefreshControlComponent} from "react-native";
 
 const recipePadThai: Recipe = {
     id: 1,
@@ -80,6 +79,32 @@ describe('<List />', (): void => {
     });
 
     it('should correctly add a new recipe to the recipes state if it has been passed down as a prop', (): void => {
-        
+        const pizza: Recipe = {
+            id: 3,
+            difficulty: 1,
+            duration: 120,
+            name: 'pizza'
+        };
+
+        renderer.act(() => {
+            testRenderer.update(<List navigation={mockNavigation} service={mockService} newOrUpdatedRecipe={pizza}/>);
+        });
+
+        const recipeList: ReactTestInstance = tree.findByProps({"data-qa": "recipe-list"});
+        expect(recipeList.props.data).toEqual(tree.instance.state.recipes);
+    });
+
+    it('should correctly update an existing recipe in the recipes state if it has been passed down as a prop and the id already exists', (): void => {
+        const updatedLasagneRecipe: Recipe = {
+            ...recipeLasagne,
+            duration: 20,
+        };
+
+        renderer.act(() => {
+                testRenderer.update(<List navigation={mockNavigation} service={mockService} newOrUpdatedRecipe={recipeLasagne}/>);
+        });
+
+        const recipeList: ReactTestInstance = tree.findByProps({"data-qa": "recipe-list"});
+        expect(recipeList.props.data).toEqual(tree.instance.state.recipes);
     });
 });

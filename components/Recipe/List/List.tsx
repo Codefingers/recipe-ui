@@ -8,7 +8,6 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import ActionButton from "./ActionButton";
 import {StackNavigationProp} from "@react-navigation/stack";
-import {ScrollView} from "../../Themed";
 
 /** This components props */
 interface Props {
