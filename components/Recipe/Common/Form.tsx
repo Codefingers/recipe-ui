@@ -1,10 +1,11 @@
 import * as React from "react";
-import {StyleSheet, View} from "react-native";
-import {Recipe} from "../../../services/types";
+import {FlatList, StyleSheet, View} from "react-native";
+import {Recipe, Step} from "../../../services/types";
 import {Button, Input} from 'react-native-elements';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import RecipeService from "../../../services/RecipeService";
 import {StackNavigationProp} from "@react-navigation/stack";
+import {MonoText} from "../../StyledText";
 
 /** Describes this components props */
 interface Props {
@@ -165,6 +166,12 @@ export default class Form extends React.PureComponent<Props, State> {
         );
     }
 
+    private renderStep = ({item, index}: { item: Step, index: number }): React.ReactElement | null => (
+        <View style={styles.stepContainer}>
+            <MonoText> {item.step} </MonoText>
+        </View>
+    );
+
     /**
      * @inheritDoc
      */
@@ -185,8 +192,11 @@ export default class Form extends React.PureComponent<Props, State> {
                     label='Duration (minutes)'
                     value={this.state.recipe.duration.toString()}
                     labelStyle={styles.inputLabel}
-                    rightIconContainerStyle={styles.iconContainer}
-                    rightIcon={<MaterialCommunityIcons name="clock" color='white' size={24}/>}
+                    rightIcon={
+                        <View style={styles.iconContainer}>
+                            <MaterialCommunityIcons name="clock" style={styles.icon}/>
+                        </View>
+                    }
                     keyboardType={"numeric"}
                     onChangeText={this.durationChangeHandler}
                     data-qa="recipe-duration-input"
@@ -202,10 +212,48 @@ export default class Form extends React.PureComponent<Props, State> {
                     data-qa="recipe-difficulty-input"
                 />
             </View>
+            <FlatList<Step>
+                horizontal
+                pagingEnabled={true}
+                showsHorizontalScrollIndicator={true}
+                data={this.getSteps()}
+                renderItem={this.renderStep}
+                style={styles.carousel}
+                keyExtractor={step => step.step}
+                data-qa="step-list"
+                decelerationRate={"normal"}
+                snapToInterval={400} //your element width
+                snapToAlignment={"center"}
+            />
             {this.renderFooterActions()}
         </View>
 
     );
+
+    private getSteps = (): Step[] => {
+        return [
+            {
+                id: 1,
+                order: 1,
+                step: 'First get the ingredients'
+            },
+            {
+                id: 2,
+                order: 2,
+                step: 'Cook it'
+            },
+            {
+                id: 3,
+                order: 3,
+                step: 'Dish it'
+            },
+            {
+                id: 4,
+                order: 4,
+                step: 'Eat it'
+            },
+        ];
+    }
 
     /**
      * Handler for when create is pressed
@@ -239,7 +287,7 @@ export default class Form extends React.PureComponent<Props, State> {
 
         for (let i = 0; i < difficultyLevel; i++) {
             starElements.push(
-                <MaterialCommunityIcons data-qa="chef-hat" key={i} name="chef-hat" color='white' size={24}/>
+                <MaterialCommunityIcons style={styles.icon} data-qa="chef-hat" key={i} name="chef-hat"/>
             )
         }
 
@@ -261,21 +309,29 @@ const styles = StyleSheet.create({
         display: "flex",
     },
     input: {
-        backgroundColor: 'black',
-        color: 'white',
+        backgroundColor: 'white',
+        color: 'black',
         fontFamily: 'space-mono',
         width: '100%',
+        padding: 10,
+        display: "flex"
     },
     inputLabel: {
         color: 'black',
     },
+    icon: {
+        color: 'black',
+        fontSize: 24,
+    },
     iconContainer: {
         display: "flex",
-        flex: 1,
-        justifyContent: 'flex-end',
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: 'black',
+        backgroundColor: 'white',
+        marginRight: -4,
+        marginBottom: 1,
+        padding: 10,
+        height: 47.5
     },
     saveButton: {
         width: '100%',
@@ -286,5 +342,13 @@ const styles = StyleSheet.create({
     buttonLabel: {
         marginRight: 8,
         fontSize: 24,
-    }
+    },
+    stepContainer: {
+        backgroundColor: "orange",
+        borderRightWidth: 2,
+        width: 400,
+    },
+    carousel: {
+        width: '100%',
+    },
 });
