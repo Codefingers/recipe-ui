@@ -2,7 +2,7 @@ import * as React from "react";
 import {FlatList, StyleSheet, View} from "react-native";
 import {Recipe, Step} from "../../../services/types";
 import {Button, Input} from 'react-native-elements';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {Ionicons, MaterialCommunityIcons} from "@expo/vector-icons";
 import RecipeService from "../../../services/RecipeService";
 import {StackNavigationProp} from "@react-navigation/stack";
 import {MonoText} from "../../StyledText";
@@ -166,11 +166,21 @@ export default class Form extends React.PureComponent<Props, State> {
         );
     }
 
-    private renderStep = ({item, index}: { item: Step, index: number }): React.ReactElement | null => (
-        <View style={styles.stepContainer}>
-            <MonoText> {item.step} </MonoText>
-        </View>
-    );
+    private renderStep = ({item, index}: { item: Step, index: number }): React.ReactElement | null => {
+        if (item.order === 0) {
+            return (
+                <View style={styles.addStepContainer}>
+                    <Ionicons name="md-add" size={32} color='white' style={styles.icon} />
+                </View>
+            );
+        }
+
+        return (
+            <View style={styles.stepContainer}>
+                <MonoText> {item.step} </MonoText>
+            </View>
+        );
+    }
 
     /**
      * @inheritDoc
@@ -219,10 +229,10 @@ export default class Form extends React.PureComponent<Props, State> {
                 data={this.getSteps()}
                 renderItem={this.renderStep}
                 style={styles.carousel}
-                keyExtractor={step => step.step}
+                keyExtractor={step => step.step + step.id}
                 data-qa="step-list"
                 decelerationRate={"normal"}
-                snapToInterval={400} //your element width
+                snapToInterval={400}
                 snapToAlignment={"center"}
             />
             {this.renderFooterActions()}
@@ -232,6 +242,11 @@ export default class Form extends React.PureComponent<Props, State> {
 
     private getSteps = (): Step[] => {
         return [
+            {
+                id: 0,
+                order: 0,
+                step: 'First get the ingredients'
+            },
             {
                 id: 1,
                 order: 1,
@@ -345,8 +360,12 @@ const styles = StyleSheet.create({
     },
     stepContainer: {
         backgroundColor: "orange",
-        borderRightWidth: 2,
         width: 400,
+    },
+    addStepContainer: {
+        backgroundColor: "blue",
+        width: 400,
+        display: "flex",
     },
     carousel: {
         width: '100%',
